@@ -1,6 +1,9 @@
 package danielrocha.cinema.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -346,5 +349,19 @@ public class MovieModel {
 
     public String getUrl() {
         return "http://image.tmdb.org/t/p/w342" + this.poster_path;
+    }
+
+    public Date getDateFromString(String dateString) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(dateString);
+            return date;
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public String getReleaseYear() {
+        return this.release_date.split("-")[0];
     }
 }

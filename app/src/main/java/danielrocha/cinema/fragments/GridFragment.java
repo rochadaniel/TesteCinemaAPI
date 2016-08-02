@@ -88,27 +88,11 @@ public class GridFragment  extends Fragment implements OnItemClickListener {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        /*recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-
-                Toast.makeText(getActivity(), movieModels.get(position).getOriginal_title(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));*/
 
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
 
             @Override
             public void onLoadMore(int current_page) {
-                /*if(perfilListAdapter.getListSize() < perfilListAdapter.getTotalOrders()) {
-                    //Toast.makeText(getActivity(), "LOAD MORE", Toast.LENGTH_SHORT).show();
-                    getOrders();
-                }*/
                 if(current_page <= totalPages) {
                     Toast.makeText(getActivity(), "Pag.: " + current_page, Toast.LENGTH_SHORT).show();
                     getMovies(current_page);
