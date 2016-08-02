@@ -345,6 +345,6 @@ public class MovieModel {
     }
 
     public String getUrl() {
-        return "http://image.tmdb.org/t/p/w185" + this.poster_path;
+        return "http://image.tmdb.org/t/p/w342" + this.poster_path;
     }
 }

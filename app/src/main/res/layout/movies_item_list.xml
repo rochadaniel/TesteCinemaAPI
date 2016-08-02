@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/thumbnail"
+    <danielrocha.cinema.utils.SquareImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY" />
 </danielrocha.cinema.utils.SquareLayout>

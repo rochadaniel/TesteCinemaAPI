@@ -17,21 +17,23 @@ import java.util.List;
 
 import danielrocha.cinema.R;
 import danielrocha.cinema.models.MovieModel;
+import danielrocha.cinema.utils.OnItemClickListener;
 
 /**
  * Created by danielrocha on 01/08/16.
  */
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> implements View.OnClickListener {
 
     private List<MovieModel> movieModels;
     private Context mContext;
+    private OnItemClickListener onItemClickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            thumbnail = (ImageView) view.findViewById(R.id.image);
         }
     }
 
@@ -46,6 +48,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movies_item_list, parent, false);
 
+        itemView.setOnClickListener(this);
+
         return new MyViewHolder(itemView);
     }
 
@@ -58,6 +62,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.thumbnail);
+
+        holder.itemView.setTag(movieModel);
     }
 
     @Override
@@ -65,13 +71,21 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         return movieModels.size();
     }
 
-    public interface ClickListener {
-        void onClick(View view, int position);
+//    public interface ClickListener {
+//        void onClick(View view, int position);
+//
+//        void onLongClick(View view, int position);
+//    }
 
-        void onLongClick(View view, int position);
+    @Override public void onClick(final View v) {
+        onItemClickListener.onItemClick(v, (MovieModel) v.getTag());
     }
 
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    /*public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
         private GalleryAdapter.ClickListener clickListener;
@@ -112,5 +126,5 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
-    }
+    }*/
 }

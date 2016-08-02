@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import danielrocha.cinema.MovieDetailsActivity;
 import danielrocha.cinema.R;
 import danielrocha.cinema.adapters.GalleryAdapter;
 import danielrocha.cinema.api.PopularAPI;
@@ -25,6 +26,7 @@ import danielrocha.cinema.enums.MovieType;
 import danielrocha.cinema.models.MovieModel;
 import danielrocha.cinema.models.TheMovieModel;
 import danielrocha.cinema.utils.EndlessRecyclerOnScrollListener;
+import danielrocha.cinema.utils.OnItemClickListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +34,7 @@ import retrofit2.Response;
 /**
  * Created by danielrocha on 02/08/16.
  */
-public class GridFragment  extends Fragment {
+public class GridFragment  extends Fragment implements OnItemClickListener {
 
     private GalleryAdapter mAdapter;
     private List<MovieModel> movieModels;
@@ -65,6 +67,7 @@ public class GridFragment  extends Fragment {
 
         movieModels = new ArrayList<>();
         mAdapter = new GalleryAdapter(getActivity().getApplicationContext(), movieModels);
+        mAdapter.setOnItemClickListener(this);
         initRecyclerView();
         getMovies(1);
         return v;
@@ -85,7 +88,7 @@ public class GridFragment  extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
+        /*recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
 
@@ -96,7 +99,7 @@ public class GridFragment  extends Fragment {
             public void onLongClick(View view, int position) {
 
             }
-        }));
+        }));*/
 
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
 
@@ -114,6 +117,10 @@ public class GridFragment  extends Fragment {
                 }
             }
         });
+    }
+
+    @Override public void onItemClick(View view, MovieModel viewModel) {
+        MovieDetailsActivity.navigate(getActivity(), view.findViewById(R.id.image), viewModel);
     }
 
     private void getMovies(int page) {
