@@ -93,24 +93,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(itemTitle);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
-        try {
-            Glide.with(MovieDetailsActivity.this)
-                    .load(itemUrl)
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            image.setImageBitmap(resource);
-                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                public void onGenerated(Palette palette) {
-                                    applyPalette(palette);
-                                }
-                            });
-                        }
-                    });
-        } catch (Exception e) {
-            Toast.makeText(MovieDetailsActivity.this, "teste", Toast.LENGTH_SHORT).show();
-        }
+        Glide.with(MovieDetailsActivity.this)
+                .load(itemUrl)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        image.setImageBitmap(resource);
+                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                            public void onGenerated(Palette palette) {
+                                applyPalette(palette);
+                            }
+                        });
+                    }
+                });
 
         title.setText(itemTitle);
         description.setText(itemDescription);
