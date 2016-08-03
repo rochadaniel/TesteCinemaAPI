@@ -37,12 +37,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final String EXTRA_VOTE = "extraVote";
     private static final String EXTRA_YEAR = "extraYear";
 
+    private String itemTitle, itemDescription, itemUrl, itemYear;
+    private double itemRating;
+
     @Bind(R.id.image) ImageView image;
     @Bind(R.id.title) TextView title;
     @Bind(R.id.description) TextView description;
     @Bind(R.id.year) TextView year;
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbarLayout;
     @Bind(R.id.ratingBar) RatingBar ratingBar;
+    @Bind(R.id.toolbar) Toolbar toolbar;
 
     public static void navigate(FragmentActivity activity, View transitionImage, MovieModel viewModel) {
         Intent intent = new Intent(activity, MovieDetailsActivity.class);
@@ -67,18 +71,28 @@ public class MovieDetailsActivity extends AppCompatActivity {
         ViewCompat.setTransitionName(findViewById(R.id.app_bar_layout), EXTRA_IMAGE);
         supportPostponeEnterTransition();
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initToolbar();
 
         ratingBar.setRating(0.0f);
 
-        String itemTitle = getIntent().getStringExtra(EXTRA_TITLE);
+        if(savedInstanceState == null) {
+            itemTitle = getIntent().getStringExtra(EXTRA_TITLE);
+            itemDescription = getIntent().getStringExtra(EXTRA_DESCRIPTION);
+            itemYear = getIntent().getStringExtra(EXTRA_YEAR);
+            itemRating = (getIntent().getDoubleExtra(EXTRA_VOTE, 0)/2);
+        } else {
+            itemTitle = savedInstanceState.getString(EXTRA_TITLE);
+            itemDescription = savedInstanceState.getString(EXTRA_DESCRIPTION);
+            itemYear = savedInstanceState.getString(EXTRA_YEAR);
+            itemRating = savedInstanceState.getDouble(EXTRA_VOTE);
+        }
+
 
         collapsingToolbarLayout.setTitle(itemTitle);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
         Glide.with(MovieDetailsActivity.this)
-                .load(getIntent().getStringExtra(EXTRA_IMAGE))
+                .load(itemUrl)
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -93,13 +107,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 });
 
         title.setText(itemTitle);
-        description.setText(getIntent().getStringExtra(EXTRA_DESCRIPTION));
-        year.setText(getIntent().getStringExtra(EXTRA_YEAR));
-        double rating = (getIntent().getDoubleExtra(EXTRA_VOTE, 0)/2);
-        float newRating = (float) (rating/2);
+        description.setText(itemDescription);
+        year.setText(itemYear);
+        ratingBar.setRating(Float.parseFloat(itemRating + "f"));
 
-        ratingBar.setRating(Float.parseFloat(rating + "f"));
+    }
 
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initActivityTransitions() {
@@ -128,4 +150,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         supportStartPostponedEnterTransition();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(EXTRA_IMAGE, itemUrl);
+        savedInstanceState.putString(EXTRA_TITLE, itemTitle);
+        savedInstanceState.putString(EXTRA_DESCRIPTION, itemDescription);
+        savedInstanceState.putDouble(EXTRA_VOTE, itemRating);
+        savedInstanceState.putString(EXTRA_YEAR, itemYear);
+    }
 }
