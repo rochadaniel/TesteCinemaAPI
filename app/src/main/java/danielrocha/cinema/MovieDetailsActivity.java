@@ -161,4 +161,44 @@ public class MovieDetailsActivity extends AppCompatActivity {
         savedInstanceState.putDouble(EXTRA_VOTE, itemRating);
         savedInstanceState.putString(EXTRA_YEAR, itemYear);
     }
+
+    public String getItemTitle() {
+        return itemTitle;
+    }
+
+    public void setItemTitle(String itemTitle) {
+        this.itemTitle = itemTitle;
+    }
+
+    public String getItemDescription() {
+        return itemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    public String getItemUrl() {
+        return itemUrl;
+    }
+
+    public void setItemUrl(String itemUrl) {
+        this.itemUrl = itemUrl;
+    }
+
+    public String getItemYear() {
+        return itemYear;
+    }
+
+    public void setItemYear(String itemYear) {
+        this.itemYear = itemYear;
+    }
+
+    public double getItemRating() {
+        return itemRating;
+    }
+
+    public void setItemRating(double itemRating) {
+        this.itemRating = itemRating;
+    }
 }
