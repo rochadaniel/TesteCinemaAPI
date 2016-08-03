@@ -79,11 +79,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
             itemTitle = getIntent().getStringExtra(EXTRA_TITLE);
             itemDescription = getIntent().getStringExtra(EXTRA_DESCRIPTION);
             itemYear = getIntent().getStringExtra(EXTRA_YEAR);
+            itemUrl = getIntent().getStringExtra(EXTRA_IMAGE);
             itemRating = (getIntent().getDoubleExtra(EXTRA_VOTE, 0)/2);
         } else {
             itemTitle = savedInstanceState.getString(EXTRA_TITLE);
             itemDescription = savedInstanceState.getString(EXTRA_DESCRIPTION);
             itemYear = savedInstanceState.getString(EXTRA_YEAR);
+            itemUrl = savedInstanceState.getString(EXTRA_IMAGE);
             itemRating = savedInstanceState.getDouble(EXTRA_VOTE);
         }
 
@@ -91,20 +93,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(itemTitle);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
-        Glide.with(MovieDetailsActivity.this)
-                .load(itemUrl)
-                .asBitmap()
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        image.setImageBitmap(resource);
-                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                            public void onGenerated(Palette palette) {
-                                applyPalette(palette);
-                            }
-                        });
-                    }
-                });
+        try {
+            Glide.with(MovieDetailsActivity.this)
+                    .load(itemUrl)
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            image.setImageBitmap(resource);
+                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                public void onGenerated(Palette palette) {
+                                    applyPalette(palette);
+                                }
+                            });
+                        }
+                    });
+        } catch (Exception e) {
+            Toast.makeText(MovieDetailsActivity.this, "teste", Toast.LENGTH_SHORT).show();
+        }
 
         title.setText(itemTitle);
         description.setText(itemDescription);
